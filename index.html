@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chúc mừng sinh nhật</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: pink;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .container {
+      margin-top: 10vh;
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 30px;
+      border-radius: 15px;
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    input {
+      font-size: 20px;
+      text-align: center;
+      margin: 10px 0;
+      padding: 8px;
+      width: 80%;
+    }
+
+    .keypad button {
+      width: 60px;
+      height: 60px;
+      margin: 5px;
+      font-size: 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: #ff6699;
+      color: white;
+      cursor: pointer;
+    }
+
+    .keypad button:hover {
+      background-color: #ff3366;
+    }
+
+    #birthday-screen {
+      padding: 40px 10px;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      background-color: #ff6699;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ff3366;
+    }
+
+    #heart-container {
+      position: absolute;
+      width: 100%;
+      height: 100vh;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+    }
+
+    .tiny-heart {
+      position: absolute;
+      font-size: 20px;
+      color: red;
+      animation: pop 0.8s ease forwards;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .falling {
+      animation: fall 3s ease-in forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(500px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    #center-text {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 36px;
+      color: #e60073;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 2s ease;
+      z-index: 10;
+    }
+
+    #plasma-heart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 200px;
+      height: 180px;
+      background: radial-gradient(circle at center, #ff66cc, #ff1a8c, #ff0066);
+      clip-path: path("M100 180 C60 120, 0 100, 50 40 C80 0, 120 0, 150 40 C200 100, 140 120, 100 180 Z");
+      border-radius: 50%;
+      animation: pulse 1.5s infinite ease-in-out alternate;
+      opacity: 0;
+      z-index: 9;
+    }
+
+    @keyframes pulse {
+      to {
+        transform: translate(-50%, -50%) scale(1.2);
+        filter: brightness(1.5) saturate(1.5);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="password-screen">
+    <div class="container">
+      <h2>Sinh Nhật của em 🎂</h2>
+      <input type="password" id="password" placeholder="Nhập ngày sinh (ddmm)" readonly />
+      <div class="keypad">
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="clearInput()">X</button>
+        <button onclick="appendNumber('0')">0</button>
+        <button onclick="checkPassword()">✔</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="birthday-screen" class="hidden">
+    <h1>🎉 Chúc mừng sinh nhật! 🎉</h1>
+    <p>Chúc mừng sinh nhật người con gái tuyệt vời nhất cuộc đời anh!</p>
+    <button onclick="startAnimation()">Mở quà bất ngờ 🎁</button>
+  </div>
+
+  <div id="heart-container"></div>
+  <div id="center-text">Trần Anh Thư</div>
+  <div id="plasma-heart"></div>
+
+  <script>
+    function appendNumber(num) {
+      const input = document.getElementById("password");
+      if (input.value.length < 4) {
+        input.value += num;
+      }
+    }
+
+    function clearInput() {
+      document.getElementById("password").value = "";
+    }
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      const correct = "0407"; // chỉnh mật khẩu tại đây
+      if (input === correct) {
+        document.getElementById("password-screen").classList.add("hidden");
+        document.getElementById("birthday-screen").classList.remove("hidden");
+      } else {
+        alert("Sai rồi 😢");
+        clearInput();
+      }
+    }
+
+    function startAnimation() {
+      const container = document.getElementById("heart-container");
+      container.innerHTML = "";
+      const total = 100;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2.2;
+
+      for (let i = 0; i < total; i++) {
+        const angle = Math.PI * 2 * (i / total);
+        const x = 16 * Math.pow(Math.sin(angle), 3);
+        const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) -
+                    2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+        const heart = document.createElement("div");
+        heart.className = "tiny-heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = `${centerX + x * 15}px`;
+        heart.style.top = `${centerY + y * 15}px`;
+        container.appendChild(heart);
+      }
+
+      setTimeout(() => {
+        const hearts = document.querySelectorAll(".tiny-heart");
+        hearts.forEach(h => h.classList.add("falling"));
+      }, 2500);
+
+      setTimeout(() => {
+        document.getElementById("center-text").style.opacity = 1;
+      }, 5000);
+
+      setTimeout(() => {
+        document.getElementById("heart-container").innerHTML = "";
+        document.getElementById("plasma-heart").style.opacity = 1;
+        document.getElementById("plasma-heart").style.transform = "translate(-50%, -50%) scale(1)";
+      }, 6500);
+    }
+  </script>
+</body>
+</html>
