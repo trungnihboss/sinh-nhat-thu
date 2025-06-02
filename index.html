@@ -2,230 +2,305 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chúc mừng sinh nhật</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: pink;
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .container {
-      margin-top: 10vh;
-      background-color: rgba(255, 255, 255, 0.85);
-      padding: 30px;
-      border-radius: 15px;
-      width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    input {
-      font-size: 20px;
-      text-align: center;
-      margin: 10px 0;
-      padding: 8px;
-      width: 80%;
-    }
-
-    .keypad button {
-      width: 60px;
-      height: 60px;
-      margin: 5px;
-      font-size: 20px;
-      border-radius: 10px;
-      border: none;
-      background-color: #ff6699;
-      color: white;
-      cursor: pointer;
-    }
-
-    .keypad button:hover {
-      background-color: #ff3366;
-    }
-
-    #birthday-screen {
-      padding: 40px 10px;
-    }
-
-    button {
-      font-size: 18px;
-      padding: 10px 20px;
-      background-color: #ff6699;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #ff3366;
-    }
-
-    #heart-container {
-      position: absolute;
-      width: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffe6f0;
       height: 100vh;
-      left: 0;
-      top: 0;
+      overflow: hidden;
+    }
+
+    .screen {
+      display: none;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .show { display: flex !important; }
+
+    /* ----------- MÀN HÌNH NHẬP MẬT KHẨU ---------- */
+    #loginScreen {
+      background: url('https://i.imgur.com/fuHwAgY.jpg') repeat;
+      background-size: cover;
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #e91e63;
+    }
+
+    .input-display {
+      width: 180px;
+      height: 40px;
+      margin: 0 auto 15px;
+      font-size: 1.4em;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .numpad button {
+      padding: 15px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      border: none;
+      background: #ff90b3;
+      color: white;
+      cursor: pointer;
+    }
+
+    .numpad button:hover {
+      background: #e91e63;
+    }
+
+    /* ----------- MÀN HÌNH CHÚC MỪNG ---------- */
+    #mainScreen {
+      background: linear-gradient(to bottom, #ffdee9, #b5fffc);
+      flex-direction: column;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #ff4081;
+      font-size: 2.5em;
+    }
+
+    .message {
+      margin: 10px auto;
+      max-width: 500px;
+      font-size: 1.2em;
+    }
+
+    .gift-button {
+      margin-top: 30px;
+      padding: 12px 28px;
+      font-size: 1.2em;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+
+    .cake {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 30px auto;
+    }
+
+    .cake .top, .cake .bottom {
+      position: absolute;
+      width: 150px;
+      height: 75px;
+      background: linear-gradient(#ff6f91, #ff4081);
+      border-radius: 50% 50% 10% 10% / 50% 50% 20% 20%;
+    }
+
+    .cake .bottom {
+      top: 75px;
+      background: linear-gradient(#ff8da3, #ff4081);
+    }
+
+    .cake.split .top {
+      transform: translateX(-100px) rotate(-20deg);
+      transition: transform 1s ease;
+    }
+
+    .cake.split .bottom {
+      transform: translateX(100px) rotate(20deg);
+      transition: transform 1s ease;
+    }
+
+    .hearts-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       pointer-events: none;
     }
 
-    .tiny-heart {
+    .heart {
       position: absolute;
-      font-size: 20px;
-      color: red;
-      animation: pop 0.8s ease forwards;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: floatDown 5s forwards;
     }
 
-    @keyframes pop {
-      from { transform: scale(0); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
-    }
-
-    .falling {
-      animation: fall 3s ease-in forwards;
-    }
-
-    @keyframes fall {
-      to {
-        transform: translateY(500px) scale(0);
-        opacity: 0;
-      }
-    }
-
-    #center-text {
+    .heart::before, .heart::after {
+      content: "";
       position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 36px;
-      color: #e60073;
-      font-weight: bold;
-      opacity: 0;
-      transition: opacity 2s ease;
-      z-index: 10;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
     }
 
-    #plasma-heart {
+    .heart::before { top: -5px; left: 0; }
+    .heart::after { left: -5px; top: 0; }
+
+    @keyframes floatDown {
+      0% {opacity: 0; transform: scale(0.5) translateY(-50px);}
+      50% {opacity: 1;}
+      100% {transform: translateY(300px); opacity: 0;}
+    }
+
+    .plasma-heart {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 200px;
-      height: 180px;
-      background: radial-gradient(circle at center, #ff66cc, #ff1a8c, #ff0066);
-      clip-path: path("M100 180 C60 120, 0 100, 50 40 C80 0, 120 0, 150 40 C200 100, 140 120, 100 180 Z");
-      border-radius: 50%;
-      animation: pulse 1.5s infinite ease-in-out alternate;
+      transform: translate(-50%, -50%);
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle at 30% 30%, #fff, #ff4081, #ff007f, #b4004e);
+      border-radius: 50% 50% 0 0;
+      box-shadow: 0 0 60px 30px rgba(255, 0, 128, 0.5);
       opacity: 0;
-      z-index: 9;
+      animation: glowHeart 2s ease-in-out forwards;
     }
 
-    @keyframes pulse {
-      to {
-        transform: translate(-50%, -50%) scale(1.2);
-        filter: brightness(1.5) saturate(1.5);
-      }
+    @keyframes glowHeart {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.5);}
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1);}
+    }
+
+    .name-text {
+      font-size: 2em;
+      font-weight: bold;
+      margin-top: 30px;
+      color: #d6336c;
+      opacity: 0;
+      animation: fadeIn 2s ease-in-out 2s forwards;
+    }
+
+    @keyframes fadeIn {
+      to {opacity: 1;}
     }
   </style>
 </head>
 <body>
-  <div id="password-screen">
-    <div class="container">
+
+  <!-- MÀN HÌNH NHẬP MẬT KHẨU -->
+  <div class="screen show" id="loginScreen">
+    <div class="login-box">
       <h2>Sinh Nhật của em 🎂</h2>
-      <input type="password" id="password" placeholder="Nhập ngày sinh (ddmm)" readonly />
-      <div class="keypad">
-        <button onclick="appendNumber('1')">1</button>
-        <button onclick="appendNumber('2')">2</button>
-        <button onclick="appendNumber('3')">3</button>
-        <button onclick="appendNumber('4')">4</button>
-        <button onclick="appendNumber('5')">5</button>
-        <button onclick="appendNumber('6')">6</button>
-        <button onclick="appendNumber('7')">7</button>
-        <button onclick="appendNumber('8')">8</button>
-        <button onclick="appendNumber('9')">9</button>
+      <div class="input-display" id="display">____</div>
+      <div class="numpad">
+        <button onclick="addNumber('1')">1</button>
+        <button onclick="addNumber('2')">2</button>
+        <button onclick="addNumber('3')">3</button>
+        <button onclick="addNumber('4')">4</button>
+        <button onclick="addNumber('5')">5</button>
+        <button onclick="addNumber('6')">6</button>
+        <button onclick="addNumber('7')">7</button>
+        <button onclick="addNumber('8')">8</button>
+        <button onclick="addNumber('9')">9</button>
         <button onclick="clearInput()">X</button>
-        <button onclick="appendNumber('0')">0</button>
-        <button onclick="checkPassword()">✔</button>
+        <button onclick="addNumber('0')">0</button>
+        <button onclick="checkPassword()">✓</button>
       </div>
     </div>
   </div>
 
-  <div id="birthday-screen" class="hidden">
+  <!-- MÀN HÌNH CHÍNH -->
+  <div class="screen" id="mainScreen">
     <h1>🎉 Chúc mừng sinh nhật! 🎉</h1>
-    <p>Chúc mừng sinh nhật người con gái tuyệt vời nhất cuộc đời anh!</p>
-    <button onclick="startAnimation()">Mở quà bất ngờ 🎁</button>
+    <div class="message">
+      Chúc mừng sinh nhật rực rỡ tới con gái tuyệt vời nhất đời anh!<br>
+      Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br>
+      Anh sẽ luôn cố gắng để mang đến em những điều ngọt ngào nhất 💕
+    </div>
+    <button class="gift-button" onclick="revealGift()">🎁 Món quà bất ngờ</button>
+    <div class="cake" id="cake">
+      <div class="top"></div>
+      <div class="bottom"></div>
+    </div>
+    <div class="hearts-container" id="heartsContainer"></div>
+    <div class="name-text" id="nameText">Trần Anh Thư</div>
+    <div class="plasma-heart" id="plasmaHeart"></div>
   </div>
 
-  <div id="heart-container"></div>
-  <div id="center-text">Trần Anh Thư</div>
-  <div id="plasma-heart"></div>
-
   <script>
-    function appendNumber(num) {
-      const input = document.getElementById("password");
-      if (input.value.length < 4) {
-        input.value += num;
+    const correctPassword = "11092009"; // 🡸 Thay đổi mật khẩu ở đây
+    let input = "";
+
+    function addNumber(num) {
+      if (input.length < 4) {
+        input += num;
+        updateDisplay();
       }
+    }
+
+    function updateDisplay() {
+      document.getElementById("display").innerText =
+        input + "_".repeat(4 - input.length);
     }
 
     function clearInput() {
-      document.getElementById("password").value = "";
+      input = "";
+      updateDisplay();
     }
 
     function checkPassword() {
-      const input = document.getElementById("password").value;
-      const correct = "0407"; // chỉnh mật khẩu tại đây
-      if (input === correct) {
-        document.getElementById("password-screen").classList.add("hidden");
-        document.getElementById("birthday-screen").classList.remove("hidden");
+      if (input === correctPassword) {
+        document.getElementById("loginScreen").classList.remove("show");
+        document.getElementById("mainScreen").classList.add("show");
       } else {
-        alert("Sai rồi 😢");
-        clearInput();
+        alert("Sai mật khẩu rồi 😥");
       }
     }
 
-    function startAnimation() {
-      const container = document.getElementById("heart-container");
-      container.innerHTML = "";
-      const total = 100;
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2.2;
+    function revealGift() {
+      const cake = document.getElementById("cake");
+      cake.classList.add("split");
 
-      for (let i = 0; i < total; i++) {
-        const angle = Math.PI * 2 * (i / total);
-        const x = 16 * Math.pow(Math.sin(angle), 3);
-        const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) -
-                    2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+      const container = document.getElementById("heartsContainer");
+      for (let i = 0; i < 100; i++) {
         const heart = document.createElement("div");
-        heart.className = "tiny-heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = `${centerX + x * 15}px`;
-        heart.style.top = `${centerY + y * 15}px`;
+        heart.classList.add("heart");
+        const angle = i * (2 * Math.PI / 100);
+        const radius = 100;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2 - 50;
+        const x = centerX + radius * Math.sin(angle);
+        const y = centerY - radius * Math.cos(angle);
+
+        heart.style.left = x + "px";
+        heart.style.top = y + "px";
         container.appendChild(heart);
       }
 
       setTimeout(() => {
-        const hearts = document.querySelectorAll(".tiny-heart");
-        hearts.forEach(h => h.classList.add("falling"));
-      }, 2500);
+        document.getElementById("nameText").style.opacity = 1;
+      }, 4000);
 
       setTimeout(() => {
-        document.getElementById("center-text").style.opacity = 1;
-      }, 5000);
-
-      setTimeout(() => {
-        document.getElementById("heart-container").innerHTML = "";
-        document.getElementById("plasma-heart").style.opacity = 1;
-        document.getElementById("plasma-heart").style.transform = "translate(-50%, -50%) scale(1)";
-      }, 6500);
+        document.getElementById("plasmaHeart").style.opacity = 1;
+      }, 5500);
     }
   </script>
 </body>
