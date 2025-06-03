@@ -122,6 +122,45 @@
       color: #555;
       margin-top: 20px;
     }
+
+    /* Bóng bay */
+    .balloon {
+      position: absolute;
+      width: 20px;
+      height: 30px;
+      background: red;
+      border-radius: 50% 50% 50% 50%;
+      animation: floatUp 5s linear forwards;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-120vh);
+        opacity: 0;
+      }
+    }
+
+    /* Trái tim trung tâm */
+    .heart {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 100px;
+      color: red;
+      animation: heartShow 1s ease forwards;
+    }
+
+    @keyframes heartShow {
+      to {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
   </style>
 </head>
 <body>
@@ -154,17 +193,21 @@
     <div class="birthday">
       <h1>🎂 Chúc mừng sinh nhật! 🎉</h1>
       <p>Chúc mừng sinh nhật người con gái tuyệt vời nhất cuộc đời anh!<br>
-      Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br>
-      Anh sẽ luôn cố gắng để...</p>
-      <button onclick="alert('🎁 Đây là món quà bất ngờ dành cho em!')">Mở quà bất ngờ 🎁</button>
+        Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br>
+        Anh sẽ luôn cố gắng để...</p>
+      <button onclick="startSurprise()">Mở quà bất ngờ 🎁</button>
       <br>
       <img src="ee9f0784-8c19-43b8-81f6-900e9cfafecb.png" alt="Bánh sinh nhật">
       <div class="footer-text">I'm thinking about...</div>
     </div>
   </div>
 
+  <!-- Container cho bóng bay -->
+  <div id="balloon-container"></div>
+
   <script>
     const password = "1234";
+
     function addChar(c) {
       const input = document.getElementById("password-input");
       input.value += c;
@@ -182,6 +225,24 @@
       } else {
         alert("Sai mật khẩu rồi 🥺");
       }
+    }
+
+    function startSurprise() {
+      // Tạo 100 bóng bay
+      for (let i = 0; i < 100; i++) {
+        const balloon = document.createElement("div");
+        balloon.className = "balloon";
+        balloon.style.left = Math.random() * 100 + "vw";
+        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 80%, 60%)`;
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 5000);
+      }
+
+      // Tạo trái tim
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      document.body.appendChild(heart);
     }
   </script>
 </body>
