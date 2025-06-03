@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <title>Chúc mừng sinh nhật</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #ffcdd2;
-      color: #880e4f;
-      text-align: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
     }
+
     .screen {
       position: absolute;
       width: 100%;
@@ -22,40 +25,72 @@
       align-items: center;
       flex-direction: column;
     }
-    .password-screen input {
-      font-size: 20px;
+
+    /* Mật khẩu */
+    .password-screen {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 10px auto;
+      object-fit: cover;
+    }
+    .input {
+      font-size: 22px;
       padding: 10px;
-      border: 2px solid #f06292;
+      text-align: center;
       border-radius: 10px;
+      border: none;
+      width: 200px;
       margin-bottom: 10px;
     }
-    .password-screen button {
-      padding: 10px 20px;
-      background-color: #ec407a;
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .key {
+      background-color: #f06292;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-size: 20px;
+      padding: 15px;
       cursor: pointer;
-      font-size: 16px;
     }
+
+    /* Sinh nhật */
     .birthday-screen {
       display: none;
       flex-direction: column;
       align-items: center;
       padding-top: 60px;
+      text-align: center;
     }
+
     .typewriter {
       font-size: 28px;
       font-weight: bold;
       color: #d81b60;
       white-space: pre-wrap;
-      min-height: 100px;
+      min-height: 80px;
     }
+
     .message {
       font-size: 18px;
       color: #6a1b9a;
       margin-top: 20px;
     }
+
     .btn {
       background-color: #ec407a;
       color: white;
@@ -66,6 +101,7 @@
       border: none;
       cursor: pointer;
     }
+
     .balloon {
       position: absolute;
       width: 40px;
@@ -75,6 +111,7 @@
       bottom: -100px;
       animation: floatUp 6s linear infinite;
     }
+
     .string {
       position: absolute;
       width: 2px;
@@ -84,10 +121,12 @@
       left: 50%;
       transform: translateX(-50%);
     }
+
     @keyframes floatUp {
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-120vh); opacity: 0; }
     }
+
     .heart {
       width: 120px;
       height: 120px;
@@ -96,7 +135,9 @@
       transform: rotate(-45deg);
       margin-top: 50px;
       animation: pulse 1.5s infinite;
+      display: none;
     }
+
     .heart::before,
     .heart::after {
       content: "";
@@ -106,14 +147,17 @@
       border-radius: 50%;
       position: absolute;
     }
+
     .heart::before {
       top: -60px;
       left: 0;
     }
+
     .heart::after {
       left: 60px;
       top: 0;
     }
+
     @keyframes pulse {
       0% { transform: scale(1) rotate(-45deg); }
       50% { transform: scale(1.2) rotate(-45deg); }
@@ -122,25 +166,56 @@
   </style>
 </head>
 <body>
-  <div class="screen password-screen">
-    <h2>Nhập mật khẩu sinh nhật 🎂</h2>
-    <input type="password" id="password" placeholder="ddmmyyyy">
-    <button onclick="checkPassword()">Vào</button>
+  <!-- Màn hình mật khẩu -->
+  <div class="screen password-screen" id="passwordScreen">
+    <img src="https://i.imgur.com/OZCcm6W.png" alt="Avatar" class="avatar">
+    <h3>Sinh Nhật của em 🎂</h3>
+    <input class="input" id="passwordInput" type="password" readonly placeholder="Nhập ngày sinh">
+    <div class="keypad">
+      <button class="key" onclick="addDigit('1')">1</button>
+      <button class="key" onclick="addDigit('2')">2</button>
+      <button class="key" onclick="addDigit('3')">3</button>
+      <button class="key" onclick="addDigit('4')">4</button>
+      <button class="key" onclick="addDigit('5')">5</button>
+      <button class="key" onclick="addDigit('6')">6</button>
+      <button class="key" onclick="addDigit('7')">7</button>
+      <button class="key" onclick="addDigit('8')">8</button>
+      <button class="key" onclick="addDigit('9')">9</button>
+      <button class="key" onclick="clearInput()">❌</button>
+      <button class="key" onclick="addDigit('0')">0</button>
+      <button class="key" onclick="checkPassword()">✅</button>
+    </div>
   </div>
 
-  <div class="screen birthday-screen">
+  <!-- Màn hình sinh nhật -->
+  <div class="screen birthday-screen" id="birthdayScreen">
     <div class="typewriter" id="typewriter"></div>
-    <div class="message">Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br> Anh sẽ luôn cố gắng để…</div>
+    <div class="message">
+      Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br> Anh sẽ luôn cố gắng để...
+    </div>
     <button class="btn" onclick="showSurprise()">🎁 Mở quà bất ngờ</button>
-    <div id="heart" class="heart" style="display: none;"></div>
+    <div id="heart" class="heart"></div>
   </div>
 
   <script>
+    let password = "";
+
+    function addDigit(d) {
+      if (password.length < 8) {
+        password += d;
+        document.getElementById("passwordInput").value = password.replace(/./g, "*");
+      }
+    }
+
+    function clearInput() {
+      password = "";
+      document.getElementById("passwordInput").value = "";
+    }
+
     function checkPassword() {
-      const pass = document.getElementById('password').value;
-      if (pass === "03062005") {
-        document.querySelector('.password-screen').style.display = 'none';
-        document.querySelector('.birthday-screen').style.display = 'flex';
+      if (password === "03062005") {
+        document.getElementById("passwordScreen").style.display = "none";
+        document.getElementById("birthdayScreen").style.display = "flex";
         typeWriter("🎉 Chúc mừng sinh nhật em yêu! 🎉");
       } else {
         alert("Sai mật khẩu rồi 😢");
@@ -150,7 +225,7 @@
     function typeWriter(text, i = 0) {
       if (i < text.length) {
         document.getElementById("typewriter").innerHTML += text.charAt(i);
-        setTimeout(() => typeWriter(text, i + 1), 100);
+        setTimeout(() => typeWriter(text, i + 1), 80);
       }
     }
 
