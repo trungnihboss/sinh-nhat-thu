@@ -1,151 +1,178 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chúc mừng sinh nhật!</title>
+  <meta charset="UTF-8">
+  <title>Chúc mừng sinh nhật</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #ffc0cb;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffcdd2;
+      color: #880e4f;
+      text-align: center;
       overflow: hidden;
     }
-    .container {
-      text-align: center;
-      padding-top: 80px;
+    .screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #ffcdd2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
-    h1 {
-      font-size: 2.5em;
-      color: #d63384;
+    .password-screen input {
+      font-size: 20px;
+      padding: 10px;
+      border: 2px solid #f06292;
+      border-radius: 10px;
       margin-bottom: 10px;
     }
-    .typing-text {
-      color: #a0446a;
-      font-size: 1.2em;
-      white-space: pre-line;
-      min-height: 4em;
-    }
-    .btn {
-      margin-top: 20px;
-      background-color: #ff2f92;
+    .password-screen button {
+      padding: 10px 20px;
+      background-color: #ec407a;
       color: white;
       border: none;
-      padding: 12px 25px;
-      border-radius: 30px;
-      font-size: 1em;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
     }
-    .btn:hover {
-      background-color: #e02680;
+    .birthday-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 60px;
     }
-    .cake {
-      width: 120px;
+    .typewriter {
+      font-size: 28px;
+      font-weight: bold;
+      color: #d81b60;
+      white-space: pre-wrap;
+      min-height: 100px;
+    }
+    .message {
+      font-size: 18px;
+      color: #6a1b9a;
       margin-top: 20px;
     }
-    .heart {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 200px;
-      height: 180px;
-      background: radial-gradient(circle at 30% 30%, #ff69b4, #d63384);
-      clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 50% 80%, 18% 100%, 0% 35%);
-      animation: popHeart 1s ease-out forwards;
-      display: none;
-    }
-    @keyframes popHeart {
-      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(1); }
+    .btn {
+      background-color: #ec407a;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 20px;
+      font-size: 18px;
+      margin-top: 30px;
+      border: none;
+      cursor: pointer;
     }
     .balloon {
       position: absolute;
-      bottom: -150px;
       width: 40px;
-      height: 60px;
-      background: #ff4d6d;
-      border-radius: 50% 50% 45% 45%;
-      animation: floatBalloon 6s infinite ease-in;
+      height: 50px;
+      background-color: red;
+      border-radius: 50% 50% 50% 50%;
+      bottom: -100px;
+      animation: floatUp 6s linear infinite;
     }
-    .balloon::after {
-      content: "";
+    .string {
       position: absolute;
-      bottom: -20px;
-      left: 50%;
       width: 2px;
-      height: 20px;
-      background: #333;
+      height: 30px;
+      background: #555;
+      bottom: -30px;
+      left: 50%;
       transform: translateX(-50%);
     }
-    @keyframes floatBalloon {
+    @keyframes floatUp {
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-120vh); opacity: 0; }
     }
-    .footer {
+    .heart {
+      width: 120px;
+      height: 120px;
+      background: red;
+      position: relative;
+      transform: rotate(-45deg);
+      margin-top: 50px;
+      animation: pulse 1.5s infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 120px;
+      height: 120px;
+      background: red;
+      border-radius: 50%;
       position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-style: italic;
-      color: #5a2e44;
-      font-size: 1.1em;
+    }
+    .heart::before {
+      top: -60px;
+      left: 0;
+    }
+    .heart::after {
+      left: 60px;
+      top: 0;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1) rotate(-45deg); }
+      50% { transform: scale(1.2) rotate(-45deg); }
+      100% { transform: scale(1) rotate(-45deg); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎂 Chúc mừng sinh nhật! 🎉</h1>
-    <div id="typing" class="typing-text"></div>
-    <button class="btn" onclick="showSurprise()">Mở quà bất ngờ 🎁</button>
-    <img class="cake" src="https://cdn-icons-png.flaticon.com/512/3484/3484329.png" alt="Bánh sinh nhật" />
+  <div class="screen password-screen">
+    <h2>Nhập mật khẩu sinh nhật 🎂</h2>
+    <input type="password" id="password" placeholder="ddmmyyyy">
+    <button onclick="checkPassword()">Vào</button>
   </div>
 
-  <div id="heart" class="heart"></div>
-
-  <div class="footer">I'm thinking about...</div>
+  <div class="screen birthday-screen">
+    <div class="typewriter" id="typewriter"></div>
+    <div class="message">Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br> Anh sẽ luôn cố gắng để…</div>
+    <button class="btn" onclick="showSurprise()">🎁 Mở quà bất ngờ</button>
+    <div id="heart" class="heart" style="display: none;"></div>
+  </div>
 
   <script>
-    const lines = [
-      "Chúc mừng sinh nhật người con gái tuyệt vời nhất cuộc đời anh!",
-      "Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.",
-      "Anh sẽ luôn cố gắng để..."
-    ];
-    const typing = document.getElementById("typing");
-    let lineIndex = 0;
-    let charIndex = 0;
-
-    function typeLine() {
-      if (lineIndex < lines.length) {
-        if (charIndex < lines[lineIndex].length) {
-          typing.innerHTML += lines[lineIndex][charIndex];
-          charIndex++;
-          setTimeout(typeLine, 50);
-        } else {
-          typing.innerHTML += "\n";
-          lineIndex++;
-          charIndex = 0;
-          setTimeout(typeLine, 600);
-        }
+    function checkPassword() {
+      const pass = document.getElementById('password').value;
+      if (pass === "03062005") {
+        document.querySelector('.password-screen').style.display = 'none';
+        document.querySelector('.birthday-screen').style.display = 'flex';
+        typeWriter("🎉 Chúc mừng sinh nhật em yêu! 🎉");
+      } else {
+        alert("Sai mật khẩu rồi 😢");
       }
     }
 
-    window.onload = typeLine;
+    function typeWriter(text, i = 0) {
+      if (i < text.length) {
+        document.getElementById("typewriter").innerHTML += text.charAt(i);
+        setTimeout(() => typeWriter(text, i + 1), 100);
+      }
+    }
 
     function showSurprise() {
-      const heart = document.getElementById("heart");
-      heart.style.display = "block";
       for (let i = 0; i < 100; i++) {
-        const balloon = document.createElement("div");
-        balloon.className = "balloon";
-        balloon.style.left = Math.random() * 100 + "%";
-        balloon.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
-        balloon.style.animationDelay = (Math.random() * 3) + "s";
-        document.body.appendChild(balloon);
-        setTimeout(() => balloon.remove(), 7000);
+        const b = document.createElement('div');
+        b.classList.add('balloon');
+        b.style.left = Math.random() * 100 + 'vw';
+        b.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        b.style.animationDelay = (Math.random() * 5) + 's';
+
+        const s = document.createElement('div');
+        s.classList.add('string');
+        b.appendChild(s);
+
+        document.body.appendChild(b);
+
+        setTimeout(() => {
+          document.body.removeChild(b);
+        }, 7000);
       }
+      document.getElementById("heart").style.display = "block";
     }
   </script>
 </body>
