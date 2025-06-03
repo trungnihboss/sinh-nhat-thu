@@ -4,251 +4,223 @@
   <meta charset="UTF-8">
   <title>Chúc mừng sinh nhật</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #ffcdd2;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: #ffc0cb;
       overflow: hidden;
     }
-
     .screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: #ffcdd2;
-      display: flex;
+      display: none;
       justify-content: center;
       align-items: center;
+      height: 100vh;
       flex-direction: column;
     }
-
-    /* Mật khẩu */
-    .password-screen {
-      background-color: rgba(255, 255, 255, 0.2);
+    .active {
+      display: flex;
+    }
+    .login-box {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 20px 30px;
       border-radius: 20px;
-      padding: 20px;
+      text-align: center;
       backdrop-filter: blur(10px);
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
     }
     .avatar {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      margin: 10px auto;
+      margin-bottom: 10px;
       object-fit: cover;
     }
-    .input {
-      font-size: 22px;
+    .password-input {
+      font-size: 20px;
       padding: 10px;
-      text-align: center;
+      width: 200px;
       border-radius: 10px;
       border: none;
-      width: 200px;
-      margin-bottom: 10px;
+      text-align: center;
+      margin-bottom: 15px;
     }
-
-    .keypad {
+    .numpad {
       display: grid;
       grid-template-columns: repeat(3, 60px);
       gap: 10px;
       justify-content: center;
     }
-
-    .key {
-      background-color: #f06292;
-      color: white;
-      border: none;
-      border-radius: 10px;
+    .numpad button {
       font-size: 20px;
       padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff69b4;
+      color: white;
       cursor: pointer;
+      transition: 0.2s;
+    }
+    .numpad button:hover {
+      background-color: #ff1493;
     }
 
-    /* Sinh nhật */
-    .birthday-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 60px;
+    /* Sinh nhật giao diện */
+    .birthday {
+      color: #d63384;
       text-align: center;
     }
-
-    .typewriter {
-      font-size: 28px;
-      font-weight: bold;
-      color: #d81b60;
-      white-space: pre-wrap;
-      min-height: 80px;
+    .birthday h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
     }
-
-    .message {
+    .birthday p {
       font-size: 18px;
-      color: #6a1b9a;
-      margin-top: 20px;
+      margin: 5px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: typeText 0.6s ease-out forwards;
     }
-
-    .btn {
-      background-color: #ec407a;
+    .cake {
+      width: 100px;
+      margin: 20px auto;
+    }
+    .button {
+      background-color: #ff1493;
       color: white;
-      padding: 10px 25px;
+      padding: 10px 20px;
       border-radius: 20px;
       font-size: 18px;
-      margin-top: 30px;
-      border: none;
       cursor: pointer;
+      border: none;
+      margin-top: 20px;
+    }
+    .button:hover {
+      background-color: #d40b7f;
+    }
+
+    @keyframes typeText {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .balloon {
-      position: absolute;
       width: 40px;
-      height: 50px;
-      background-color: red;
-      border-radius: 50% 50% 50% 50%;
+      height: 60px;
+      background: radial-gradient(circle at 50% 30%, #ff69b4, #d63384);
+      border-radius: 50% 50% 45% 45%;
+      position: absolute;
       bottom: -100px;
-      animation: floatUp 6s linear infinite;
+      animation: floatUp 6s ease-in forwards;
     }
-
-    .string {
+    .balloon::after {
+      content: '';
       position: absolute;
       width: 2px;
       height: 30px;
       background: #555;
-      bottom: -30px;
       left: 50%;
+      top: 100%;
       transform: translateX(-50%);
     }
-
     @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-120vh); opacity: 0; }
+      to {
+        transform: translateY(-110vh) rotate(10deg);
+      }
     }
 
     .heart {
-      width: 120px;
-      height: 120px;
-      background: red;
+      width: 100px;
+      height: 90px;
       position: relative;
-      transform: rotate(-45deg);
-      margin-top: 50px;
-      animation: pulse 1.5s infinite;
-      display: none;
+      margin: 30px auto;
+      animation: pulse 1s infinite;
     }
-
-    .heart::before,
-    .heart::after {
+    .heart::before, .heart::after {
       content: "";
-      width: 120px;
-      height: 120px;
-      background: red;
-      border-radius: 50%;
       position: absolute;
-    }
-
-    .heart::before {
-      top: -60px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: 60px;
+      width: 100px;
+      height: 90px;
+      background: red;
+      border-radius: 50px 50px 0 0;
       top: 0;
     }
-
+    .heart::before {
+      left: 50px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+    .heart::after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
     @keyframes pulse {
-      0% { transform: scale(1) rotate(-45deg); }
-      50% { transform: scale(1.2) rotate(-45deg); }
-      100% { transform: scale(1) rotate(-45deg); }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
   </style>
 </head>
 <body>
-  <!-- Màn hình mật khẩu -->
-  <div class="screen password-screen" id="passwordScreen">
-    <img src="https://i.imgur.com/OZCcm6W.png" alt="Avatar" class="avatar">
+
+<!-- Màn hình nhập mật khẩu -->
+<div class="screen active" id="loginScreen">
+  <div class="login-box">
+    <img src=".img1.jpg" alt="Avatar" class="avatar">
     <h3>Sinh Nhật của em 🎂</h3>
-    <input class="input" id="passwordInput" type="password" readonly placeholder="Nhập ngày sinh">
-    <div class="keypad">
-      <button class="key" onclick="addDigit('1')">1</button>
-      <button class="key" onclick="addDigit('2')">2</button>
-      <button class="key" onclick="addDigit('3')">3</button>
-      <button class="key" onclick="addDigit('4')">4</button>
-      <button class="key" onclick="addDigit('5')">5</button>
-      <button class="key" onclick="addDigit('6')">6</button>
-      <button class="key" onclick="addDigit('7')">7</button>
-      <button class="key" onclick="addDigit('8')">8</button>
-      <button class="key" onclick="addDigit('9')">9</button>
-      <button class="key" onclick="clearInput()">❌</button>
-      <button class="key" onclick="addDigit('0')">0</button>
-      <button class="key" onclick="checkPassword()">✅</button>
+    <input type="password" class="password-input" id="password" placeholder="Nhập mật khẩu">
+    <div class="numpad">
+      ${[1,2,3,4,5,6,7,8,9,'x',0,'✓'].map(val => `<button onclick="pressKey('${val}')">${val}</button>`).join('')}
     </div>
   </div>
+</div>
 
-  <!-- Màn hình sinh nhật -->
-  <div class="screen birthday-screen" id="birthdayScreen">
-    <div class="typewriter" id="typewriter"></div>
-    <div class="message">
-      Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.<br> Anh sẽ luôn cố gắng để...
-    </div>
-    <button class="btn" onclick="showSurprise()">🎁 Mở quà bất ngờ</button>
-    <div id="heart" class="heart"></div>
+<!-- Màn hình chúc mừng sinh nhật -->
+<div class="screen" id="birthdayScreen">
+  <div class="birthday">
+    <h1>🎂 Chúc mừng sinh nhật! 🎉</h1>
+    <p style="animation-delay: 0s;">Chúc mừng sinh nhật người con gái tuyệt vời nhất cuộc đời anh!</p>
+    <p style="animation-delay: 0.5s;">Anh mong em luôn mạnh khỏe, luôn rạng rỡ và hạnh phúc.</p>
+    <p style="animation-delay: 1s;">Anh sẽ luôn cố gắng để...</p>
+    <button class="button" onclick="showSurprise()">Mở quà bất ngờ 🎁</button>
+    <img src="cake.png" class="cake" alt="Bánh sinh nhật">
+    <div class="heart" id="heart"></div>
   </div>
+</div>
 
-  <script>
-    let password = "";
+<script>
+  let password = '';
 
-    function addDigit(d) {
-      if (password.length < 8) {
-        password += d;
-        document.getElementById("passwordInput").value = password.replace(/./g, "*");
-      }
-    }
-
-    function clearInput() {
-      password = "";
-      document.getElementById("passwordInput").value = "";
-    }
-
-    function checkPassword() {
-      if (password === "03062005") {
-        document.getElementById("passwordScreen").style.display = "none";
-        document.getElementById("birthdayScreen").style.display = "flex";
-        typeWriter("🎉 Chúc mừng sinh nhật em yêu! 🎉");
+  function pressKey(val) {
+    const input = document.getElementById('password');
+    if (val === 'x') {
+      password = password.slice(0, -1);
+    } else if (val === '✓') {
+      if (password === '0306') {
+        document.getElementById('loginScreen').classList.remove('active');
+        document.getElementById('birthdayScreen').classList.add('active');
       } else {
-        alert("Sai mật khẩu rồi 😢");
+        alert('Sai mật khẩu rồi 😢');
+        password = '';
       }
+    } else {
+      password += val;
     }
+    input.value = password.replace(/./g, '•');
+  }
 
-    function typeWriter(text, i = 0) {
-      if (i < text.length) {
-        document.getElementById("typewriter").innerHTML += text.charAt(i);
-        setTimeout(() => typeWriter(text, i + 1), 80);
-      }
+  function showSurprise() {
+    for (let i = 0; i < 100; i++) {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = Math.random() * 100 + 'vw';
+      balloon.style.animationDelay = (Math.random() * 4) + 's';
+      document.body.appendChild(balloon);
     }
+    document.getElementById('heart').style.display = 'block';
+  }
+</script>
 
-    function showSurprise() {
-      for (let i = 0; i < 100; i++) {
-        const b = document.createElement('div');
-        b.classList.add('balloon');
-        b.style.left = Math.random() * 100 + 'vw';
-        b.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
-        b.style.animationDelay = (Math.random() * 5) + 's';
-
-        const s = document.createElement('div');
-        s.classList.add('string');
-        b.appendChild(s);
-
-        document.body.appendChild(b);
-
-        setTimeout(() => {
-          document.body.removeChild(b);
-        }, 7000);
-      }
-      document.getElementById("heart").style.display = "block";
-    }
-  </script>
 </body>
 </html>
